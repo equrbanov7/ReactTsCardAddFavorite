@@ -1,0 +1,13 @@
+.Card {
+  position: relative;
+  .EmptyFavoriteIcon {
+    position: absolute;
+    z-index: 2;
+    right: 12px;
+    top: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    color: #1D9E34;
+  }
+}

@@ -1,0 +1,41 @@
+@import "../../assets/styles/variables.scss";
+@import "../../assets/styles/mixin.scss";
+
+.Header {
+  @include flexItems(center, center);
+  padding: 20px 20px;
+  background-color: map-get($colors,  secondaryDark);
+ 
+
+  h1 {
+    @include makeColorFix(black, desktopSize28, HardWeight);
+    margin: 0;
+  }
+
+  .HeaderNavLinks {
+    @include makeFlexForRow(15px);
+    @include flexItems(center, center);
+
+    width: 100%;
+    .HeaderNavBarLink {
+      text-decoration: none;
+      @include makeColorFix(primaryFirst1, paragraph18, regular);
+      transition: color 0.3s ease;
+      border: 1px solid;
+      border-radius: 8px;
+      padding: 12px 16px;
+      
+      &:hover {
+        color: #fff;
+        background-color:map-get($colors,  secondaryDark);
+      }
+      &.active {
+        color: #fff;
+        background-color: map-get($colors,   primarySecond2);
+        &:hover{
+          color: #fff;
+        }
+      }
+    }
+  }
+}
