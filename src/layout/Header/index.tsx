@@ -1,11 +1,20 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SetStateAction, useContext, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./index.scss";
+import { ProductsContext } from "../../contexts/productContext";
 
 const Header = () => {
   const [activeLink, setActiveLink] = useState("");
+  const { products } = useContext(ProductsContext);
+  const location = useLocation();
 
-  const handleLinkClick = (link: string) => {
+  useEffect(() => {
+    setActiveLink(location.pathname);
+  }, [location]);
+
+  const likedProducts = products.filter((product) => product.liked);
+
+  const handleLinkClick = (link: SetStateAction<string>) => {
     setActiveLink(link);
   };
 
@@ -36,6 +45,9 @@ const Header = () => {
           onClick={() => handleLinkClick("/favorites")}
         >
           Favorites
+          {likedProducts.length > 0 && (
+            <span className="FavoritesCount">{likedProducts.length}</span>
+          )}
         </Link>
       </nav>
     </div>

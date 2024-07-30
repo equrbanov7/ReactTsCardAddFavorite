@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ProductsContext } from "../../contexts/productContext";
 import "./index.scss";
 import CustomCard from "../../components/Card";
+import { Link } from "react-router-dom";
 
 
 
@@ -20,6 +21,11 @@ const Favorites = () => {
           product={product}
         />
       ))}
+
+      {
+        likedProducts.length <1 && <Link to="/products" >Back To Shopping</Link>
+      }
+      
     </div>
   );
 };

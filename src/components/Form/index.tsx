@@ -21,7 +21,7 @@ const Form = () => {
         };
         try {
           const response = await postCustomerInfo(customerData);
-          console.log('Customer added:', response);
+          // console.log('Customer added:', response);
           reset();
         } catch (error) {
           console.error('Error adding customer:', error);

@@ -35,7 +35,7 @@ function App() {
     fetchData();
   }, []);
 
-  console.log(products)
+  // console.log(products)
 
   return (
     <>
