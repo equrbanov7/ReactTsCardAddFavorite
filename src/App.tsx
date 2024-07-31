@@ -1,20 +1,13 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from "./layout/Header";
-// import AddCustomer from "./pages/AddCustomers";
-// import CustomerList from "./pages/Customers";
-// import Favorites from "./pages/Favorites";
+import { routes } from "./routes"
+import { RouterProvider } from "react-router-dom";
+import { ProductsContextProvider } from "./contexts/productContext";
+import { useEffect, useState } from "react";
+import { ProductTypes } from "./types/product/productTypes";
+import { getProducts } from "./api/products";
 
-import "./assets/styles/base.scss"
-import Home from './pages/Home';
-import Products from './pages/Products';
-import { ProductsContextProvider } from './contexts/productContext';
-import { useEffect, useState } from 'react';
-import { ProductTypes } from './types/product/productTypes';
-import { getProducts } from './api/products';
-import Favorites from './pages/Favorites';
+import "./assets/styles/base.scss";
 
 function App() {
-
   const [products, setProducts] = useState<ProductTypes[]>([]);
 
   useEffect(() => {
@@ -35,24 +28,21 @@ function App() {
     fetchData();
   }, []);
 
-  // console.log(products)
-
   return (
     <>
-    <ProductsContextProvider value={{products,setProducts}} >
-      <Router>
-        <Header />
-        <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/favorites" element={<Favorites />} />
-          {/* <Route path="/add-customer" element={<AddCustomer />} />
-          <Route path="/customer-list" element={<CustomerList />} />
-          <Route path="/favorites" element={<Favorites />} /> */}
-        </Routes>
-      </Router>
-
-    </ProductsContextProvider>
+      <ProductsContextProvider value={{ products, setProducts }}>
+      {/* <Header /> */}
+      <RouterProvider router={routes} />
+        {/* <Router>
+        
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Router> */}
+      </ProductsContextProvider>
     </>
   );
 }

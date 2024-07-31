@@ -3,8 +3,6 @@ import { ProductTypes } from "../types/product/productTypes";
 import { defaultValTye } from "../types/product/defaultProductType";
 
 
-
-
 const defaultProduct: ProductTypes = {
     id: 0,
     name: "",

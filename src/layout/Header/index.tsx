@@ -20,6 +20,14 @@ const Header = () => {
 
   return (
     <div className="Header">
+      <Link
+        to="/"
+        className={`HeaderNavBarLink HeaderLogo`}
+        onClick={() => handleLinkClick("/")}
+      >
+        3KED
+      </Link>
+
       <nav className="HeaderNavLinks">
         <Link
           to="/"
@@ -27,6 +35,15 @@ const Header = () => {
           onClick={() => handleLinkClick("/")}
         >
           Home
+        </Link>
+        <Link
+          to="/contact"
+          className={`HeaderNavBarLink ${
+            activeLink === "/contact" ? "active" : ""
+          }`}
+          onClick={() => handleLinkClick("/contact")}
+        >
+          Contact
         </Link>
         <Link
           to="/products"

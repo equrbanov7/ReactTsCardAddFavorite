@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Table";
+import Table from "../../../components/Table";
 import { Pagination } from "@mui/material";
 import {
   deleteCustomerInfo,
   getCustomerInfo,
   updateCustomerInfo,
-} from "../../api/customer";
+} from "../../../api/customer";
 
 import "./index.scss";
 

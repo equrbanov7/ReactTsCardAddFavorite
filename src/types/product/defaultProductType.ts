@@ -1,7 +1,8 @@
+import { Dispatch, SetStateAction } from "react";
 import { ProductTypes } from "./productTypes"
 
 
 export type defaultValTye = {
     products: ProductTypes[],
-    setProduct: (product: ProductTypes) => void;
+    setProducts:  Dispatch<SetStateAction<ProductTypes[]>>;
 }
