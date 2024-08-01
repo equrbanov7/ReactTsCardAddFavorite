@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import Table from "../../../components/Table";
 import { Pagination } from "@mui/material";
-import {
-  deleteCustomerInfo,
-} from "../../../api/customer";
-
 import "./index.scss";
-import { getProducts } from "../../../api/products";
+import { deleteProduct, getProducts } from "../../../api/products";
 import { ProductTypes } from "../../../types/product/productTypes";
 
 export interface SortEnums {
@@ -20,18 +16,6 @@ export const ENUMS: SortEnums = {
   desc: "DESC",
 };
 
-// interface Customer {
-//   id: number;
-//   companyName: string;
-//   contactTitle: string;
-//   city: string;
-//   country: string;
-//   createDate: string;
-//   liked: boolean;
-// }
-
-
-
 const AdminProducts = () => {
   const [products, setProducts] = useState<ProductTypes[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,11 +26,12 @@ const AdminProducts = () => {
 
   const tableColumns = [
     { key: "id", name: "ID", isFilterable: false },
-    { key: "companyName", name: "Company Name", isFilterable: true },
-    { key: "contactTitle", name: "Contact Title", isFilterable: false },
-    { key: "country", name: "Country", isFilterable: false },
+    { key: "image", name: "Image", isFilterable: false },
+    { key: "name", name: "Title", isFilterable: true },
+    { key: "price", name: "Price", isFilterable: true },
+    { key: "description", name: "Description", isFilterable: false },
     { key: "delete", name: "Delete", isFilterable: false },
-    { key: "addFav", name: "Add To Favorites", isFilterable: false },
+    { key: "edit", name: "Edit", isFilterable: false },
   ];
 
   const emptyTableMessage = "There is not any customer";
@@ -60,16 +45,24 @@ const AdminProducts = () => {
             new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
         );
 
-        if (columnName && columnName !== "delete" && columnName !== "addFav") {
+        if (columnName && columnName !== "delete" && columnName !== "edit") {
           data.sort((a, b) => {
             const key = columnName as keyof ProductTypes;
-            if (sortType === ENUMS.desc) {
-              if (typeof a[key] === "string" && typeof b[key] === "string") {
-                return a[key].localeCompare(b[key]);
+            if (key === "name") {
+              if (sortType === ENUMS.asc) {
+                if (typeof a[key] === "string" && typeof b[key] === "string") {
+                  return a[key].localeCompare(b[key]);
+                }
+              } else if (sortType === ENUMS.desc) {
+                if (typeof a[key] === "string" && typeof b[key] === "string") {
+                  return b[key].localeCompare(a[key]);
+                }
               }
-            } else if (sortType === ENUMS.asc) {
-              if (typeof a[key] === "string" && typeof b[key] === "string") {
-                return b[key].localeCompare(a[key]);
+            } else if (key === "price") {
+              if (sortType === ENUMS.asc) {
+                return a[key] - b[key];
+              } else if (sortType === ENUMS.desc) {
+                return b[key] - a[key];
               }
             }
             return 0;
@@ -88,14 +81,36 @@ const AdminProducts = () => {
   const handleDelete = async (id: number) => {
     const confirmMessage = confirm(`Are you sure you want to delete ${id}?`);
     if (confirmMessage) {
-      await deleteCustomerInfo(id);
-      setProducts(products.filter((customer) => customer.id !== id));
+      await deleteProduct(id);
+      setProducts((prevProducts) =>
+        prevProducts.filter((customer) => customer.id !== id)
+      );
     }
   };
 
+  const handleEditProduct = async (id: number) => {
+    console.log(id)
+    // const customer = customers.find((customer) => customer.id === id);
+    // if (customer) {
+    //   try {
+    //     await updateCustomerInfo(id, { liked: !customer.liked });
+    //     setCustomers((prevCustomers) =>
+    //       prevCustomers.map((customer) =>
+    //         customer.id === id
+    //           ? { ...customer, liked: !customer.liked }
+    //           : customer
+    //       )
+    //     );
+    //   } catch (error) {
+    //     console.error("Error updating customer:", error);
+    //   }
+    // }
+  };
 
-
-  const handlePageChange = (_event: unknown, value: number) => {
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setCurrentPage(value);
   };
@@ -111,11 +126,12 @@ const AdminProducts = () => {
         tableColumns={tableColumns}
         deleteFunction={handleDelete}
         emptyTableMessage={emptyTableMessage}
-        // addFavoritesFunction={handleAddToFavorites}
+         handleEditProduct={handleEditProduct}
         showDeleteColumn
         setColumnName={setColumnName}
         setSortType={setSortType}
         sortType={sortType}
+        columnNameClick={columnName}
       />
 
       {products.length > itemsPerPage && (

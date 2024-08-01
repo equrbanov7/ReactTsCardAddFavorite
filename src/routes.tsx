@@ -9,6 +9,7 @@ import Dashboard from "./pages/Admin/Dashboard";
 import AddProduct from "./pages/Admin/AddProduct";
 import AdminProducts from "./pages/Admin/Products";
 import AdminLayout from "./pages/Admin";
+import ProductInfo from "./pages/Client/ProductInfo";
 
 export const routes = createBrowserRouter([
   // Admin Side
@@ -47,6 +48,7 @@ export const routes = createBrowserRouter([
       {
         path: "/products",
         element: <Products />,
+        children: [{ path: ":productId", element: <ProductInfo id={0} /> }],
       },
       {
         path: "/favorites",

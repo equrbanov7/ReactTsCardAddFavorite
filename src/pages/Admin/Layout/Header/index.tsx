@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <div className="AdminHeader">
       <Link
-        to="/"
+        to="/admin"
         className={`HeaderNavBarLink HeaderLogo`}
         onClick={() => handleLinkClick("/admin")}
       >

@@ -3,8 +3,8 @@ import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
 import "./index.scss";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ENUMS } from "../../pages/Admin/Customers";
 import { ProductTypes } from "../../types/product/productTypes";
+import { ENUMS } from "../../pages/Admin/Products";
 
 interface Column {
   name: string;
@@ -17,42 +17,53 @@ interface TableProps {
   tableItems: ProductTypes[];
   emptyTableMessage: string;
   deleteFunction?: (id: number) => void;
-  addFavoritesFunction?: (id: number) => void;
+  handleEditProduct?: (id: number) => void;
   showDeleteColumn: boolean;
   setColumnName: (columnName: string) => void;
   setSortType: Dispatch<SetStateAction<"" | "ASC" | "DESC">>;
   sortType: string;
+  columnNameClick:string;
 }
-
-
 
 const Table = ({
   tableColumns,
   tableItems,
   emptyTableMessage,
   deleteFunction,
-  addFavoritesFunction,
+  handleEditProduct,
   showDeleteColumn = true,
   setColumnName,
   setSortType,
   sortType,
+  columnNameClick
 }: TableProps) => {
-  const [countOfColumnClick, setCountOfColumnClick] = useState(0);
+  const [countOfColumnClick, setCountOfColumnClick] = useState<{
+    [key: string]: number;
+  }>({});
+
   const handleHeaderClick = (columnName: string) => {
-    if (countOfColumnClick === 0) {
+    if (countOfColumnClick[columnName] === undefined) {
+      setCountOfColumnClick({});
+    }
+
+    if (
+      countOfColumnClick[columnName] === 0 ||
+      countOfColumnClick[columnName] === undefined
+    ) {
       setColumnName(columnName);
       setSortType(ENUMS.desc);
-      setCountOfColumnClick((prev) => prev + 1);
-    } else if (countOfColumnClick === 1) {
+      setCountOfColumnClick((prev) => ({ ...prev, [columnName]: 1 }));
+    } else if (countOfColumnClick[columnName] === 1) {
       setColumnName(columnName);
       setSortType(ENUMS.asc);
-      setCountOfColumnClick((prev) => prev + 1);
+      setCountOfColumnClick((prev) => ({ ...prev, [columnName]: 2 }));
     } else {
       setColumnName("");
       setSortType("");
-      setCountOfColumnClick(0);
+      setCountOfColumnClick({});
     }
   };
+
   return (
     <div className="Table">
       <table>
@@ -69,12 +80,12 @@ const Table = ({
                 {column.name}
                 {column.isFilterable && (
                   <>
-                    {sortType === ENUMS.desc ? (
-                      <SouthIcon />
-                    ) : sortType === ENUMS.asc ? (
-                      <NorthIcon />
+                    {sortType === ENUMS.desc && column.key === columnNameClick ? (
+                      <SouthIcon className="sortIcon" />
+                    ) : sortType === ENUMS.asc && column.key === columnNameClick ? (
+                      <NorthIcon className="sortIcon"  />
                     ) : (
-                      <SwapVertIcon />
+                      <SwapVertIcon className="sortIcon"  />
                     )}
                   </>
                 )}
@@ -88,11 +99,16 @@ const Table = ({
               {tableItems?.map((tableItem) => (
                 <tr key={tableItem.id}>
                   <td>{tableItem.id}</td>
-                  <td>{tableItem.companyName} </td>
-                  <td>{tableItem.contactTitle}</td>
                   <td>
-                    {tableItem.city}, {tableItem.country}
+                    <img
+                      src={tableItem.imageSrc}
+                      className="imgTableItem"
+                      alt="img"
+                    />
                   </td>
+                  <td>{tableItem.name} </td>
+                  <td>{tableItem.price}</td>
+                  <td>{tableItem.description}</td>
                   {showDeleteColumn && deleteFunction && (
                     <td>
                       <button onClick={() => deleteFunction(tableItem.id)}>
@@ -101,15 +117,13 @@ const Table = ({
                     </td>
                   )}
 
-                  {addFavoritesFunction && (
+                  {handleEditProduct && (
                     <td>
                       <button
                         className={!tableItem.liked ? "favorite" : ""}
-                        onClick={() => addFavoritesFunction(tableItem.id)}
+                        onClick={() => handleEditProduct(tableItem.id)}
                       >
-                        {tableItem.liked
-                          ? "Remove from Favorites"
-                          : "Add to Favorites"}
+                        Edit
                       </button>
                     </td>
                   )}
