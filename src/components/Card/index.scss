@@ -1,5 +1,14 @@
 .Card {
   position: relative;
+    width: 250px;
+    height: 400px;
+    overflow: hidden;
+
+    img{
+      object-fit: cover;
+      margin: auto;
+      width: auto;
+    }
   .EmptyFavoriteIcon {
     position: absolute;
     z-index: 2;

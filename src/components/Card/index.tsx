@@ -12,12 +12,14 @@ import "./index.scss";
 
 interface CustomCardProps {
   product: ProductTypes;
+  onClick?: () => void;
 }
 
-const CustomCard = ({ product }: CustomCardProps) => {
+const CustomCard = ({ product, onClick }: CustomCardProps) => {
   const { products, setProducts } = useContext(ProductsContext);
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const updatedProducts = products.map((p) =>
       p.id === product.id ? { ...p, liked: !p.liked } : p
     );
@@ -25,7 +27,7 @@ const CustomCard = ({ product }: CustomCardProps) => {
   };
 
   return (
-    <div className="Card">
+    <div className="Card" onClick={onClick}>
       <div onClick={handleFavoriteClick} className="FavoriteIcon">
         {product.liked ? (
           <FavoriteIcon className="EmptyFavoriteIcon" />
@@ -33,17 +35,19 @@ const CustomCard = ({ product }: CustomCardProps) => {
           <FavoriteBorderIcon className="EmptyFavoriteIcon" />
         )}
       </div>
-      <MuiCard sx={{ width: 300 }}>
+      <MuiCard>
         <CardActionArea>
           <CardMedia
             component="img"
             height="240"
-            image={product.imageSrc}
+            image={product?.imageSrc}
             alt={product.name}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {product.name}
+              {product.name.length > 15
+                ? product.name.slice(0, 10) + "..."
+                : product.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               ${product.price}

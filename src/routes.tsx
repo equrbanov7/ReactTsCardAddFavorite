@@ -46,16 +46,19 @@ export const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/products",
+        path: "products",
         element: <Products />,
-        children: [{ path: ":productId", element: <ProductInfo id={0} /> }],
       },
       {
-        path: "/favorites",
+        path: "products/:productId",
+        element: <ProductInfo />,
+      },
+      {
+        path: "favorites",
         element: <Favorites />,
       },
       {
-        path: "/contact",
+        path: "contact",
         element: <Contact />,
       },
     ],

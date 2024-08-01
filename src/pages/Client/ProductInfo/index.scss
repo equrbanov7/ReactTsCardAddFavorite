@@ -1,0 +1,21 @@
+.ProductInfo {
+  .MuiCard-root {
+    display: flex;
+    max-width: 800px;
+    max-height: 500px;
+    padding: 20px;
+  }
+  img {
+    object-fit: contain;
+  }
+
+  .MuiCardMedia-root {
+    width: 250px;
+  }
+
+  .MuiCardContent-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

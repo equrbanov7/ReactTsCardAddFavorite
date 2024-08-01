@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 export interface ProductTypes {
+  rating: number | null | undefined;
   description: ReactNode;
   id: number;
   name: string;
